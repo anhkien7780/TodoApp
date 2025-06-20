@@ -7,9 +7,9 @@
 
 import Foundation
 
-enum Category: String, CaseIterable{
+enum Category: String, CaseIterable, Codable{
     case Task = "task"
     case Event = "event"
     case Goal = "goal"
-    case None
+    case None = "none"
 }

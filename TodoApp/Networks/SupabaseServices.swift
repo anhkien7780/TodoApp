@@ -30,7 +30,7 @@ class SupabaseServices{
     func testSupabaseConnection() {
         Task {
             do {
-                let items: [SupaItem] = try await SupabaseServices.shared.supabaseClient
+                let items: [TodoItemDetail] = try await SupabaseServices.shared.supabaseClient
                     .from("todos")
                     .select()
                     .limit(1)

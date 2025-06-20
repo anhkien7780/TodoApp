@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TodoItemDetail {
+struct TodoItemDetail: Codable {
     var id: UUID = UUID()
     var taskTitle: String
     var category: Category?
