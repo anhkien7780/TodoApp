@@ -12,6 +12,7 @@ class CustomTextFieldView: UIView {
     
     private let label = UILabel()
     let textField = UITextField()
+    let suffixButton = UIButton()
     private let suffixIconView = UIImageView()
     
     init(labelText: String, placeholder: String, suffixIcon: UIImage? = nil, textFieldHeight: CGFloat? = nil) {
@@ -22,7 +23,7 @@ class CustomTextFieldView: UIView {
         label.text = labelText
         textField.placeholder = placeholder
         if let icon = suffixIcon {
-            setSuffixIcon(icon)
+            setSuffixIconButton(icon)
         }
         if let heightConstant = textFieldHeight {
             setTextFieldHeight(height: heightConstant)
@@ -39,6 +40,7 @@ class CustomTextFieldView: UIView {
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
+        suffixButton.translatesAutoresizingMaskIntoConstraints = false
         
         textField.borderStyle = .roundedRect
         textField.font = UIFont.systemFont(ofSize: 16)
@@ -66,21 +68,18 @@ class CustomTextFieldView: UIView {
         ])
     }
     
-    func setSuffixIcon(_ image: UIImage) {
-        suffixIconView.image = image
+    private func setSuffixIconButton(_ image: UIImage) {
+        var config = UIButton.Configuration.filled()
+        config.image = image
+        config.baseBackgroundColor = .clear
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 16)
+        suffixButton.configuration = config
         suffixIconView.contentMode = .scaleAspectFit
-
-        let container = UIView(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
-
-        // Đặt frame icon (căn giữa trong container)
-        let iconSize: CGFloat = 20
-        let padding: CGFloat = (36 - iconSize) / 2
-        suffixIconView.frame = CGRect(x: padding, y: padding, width: iconSize, height: iconSize)
-
-        container.addSubview(suffixIconView)
-        textField.rightView = container
+        suffixButton.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
+        textField.rightView = suffixButton
         textField.rightViewMode = .always
     }
+
     
     func setTextFieldHeight(height: CGFloat){
         textField.heightAnchor.constraint(equalToConstant: height).isActive = true

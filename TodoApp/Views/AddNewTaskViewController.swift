@@ -20,7 +20,7 @@ class AddNewTaskViewController: UIViewController{
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     let headerView = AddNewTaskHeaderView()
     let bodyStackView: UIStackView = {
         let stack = UIStackView()
@@ -97,6 +97,8 @@ class AddNewTaskViewController: UIViewController{
         headerView.closeIconView.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
         saveButtonView.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
         
+        dateTextFieldView.suffixButton.addTarget(self, action: #selector(showDatePicker), for: .touchUpInside)
+                
         view.addSubview(headerView)
         view.addSubview(bodyStackView)
         view.addSubview(saveButtonView)
@@ -156,6 +158,36 @@ class AddNewTaskViewController: UIViewController{
     }
     @objc func closeTapped() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func showDatePicker(){
+        
+        let alert = UIAlertController(title: "Chọn ngày và giờ", message: "\n\n\n\n\n\n\n\n\n", preferredStyle: .actionSheet)
+        
+        // Tạo DatePicker
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = .dateAndTime
+        datePicker.preferredDatePickerStyle = .compact
+        datePicker.frame = CGRect(x: 0, y: 40, width: alert.view.bounds.width - 20, height: 600)
+        datePicker.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        alert.view.addSubview(datePicker)
+        
+        alert.addAction(UIAlertAction(title: "Xong", style: .default, handler: { _ in
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .short
+            let dateString = formatter.string(from: datePicker.date)
+            self.dateTextFieldView.textField.text = dateString
+            formatter.dateStyle = .none
+            formatter.timeStyle = .short
+            let timeString = formatter.string(from: datePicker.date)
+            self.timeTextFieldView.textField.text = timeString
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Hủy", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
     }
     
     @objc func saveTapped(){
