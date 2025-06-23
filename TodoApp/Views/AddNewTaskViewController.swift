@@ -170,11 +170,10 @@ class AddNewTaskViewController: UIViewController{
         if(isValidInput(taskTextFiledView.textField.text)){
             saveTask(newItem: newItem)
         }
-        
     }
     
     func saveTask(newItem: TodoItemDetail) {
-        viewModel.addNewUncompletedItem(newItem)
+        viewModel.addNewTodoItemDetail(item: newItem)
         dismiss(animated: true)
     }
     func isValidInput(_ text: String?) -> Bool {

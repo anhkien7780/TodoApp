@@ -28,39 +28,35 @@ class SupabaseServices{
     }
     
     func loadSupabaseTodoData(completion: @escaping ([TodoItemDetail]) -> Void){
-        DispatchQueue(label: "com.TodoApp.loadTodo", qos: .userInitiated).async {
-            Task {
-                do {
-                    let items: [TodoItemDetail] = try await SupabaseServices.shared.supabaseClient
-                        .from("todos")
-                        .select()
-                        .execute()
-                        .value
-                    completion(items)
-                    print("Collect data from supabase successfully!")
-                } catch {
-                    print("Supabase connection failed!!!")
-                }
-            }
-        }
-    }
-    
-    func testSupabaseConnection() {
         Task {
             do {
                 let items: [TodoItemDetail] = try await SupabaseServices.shared.supabaseClient
                     .from("todos")
                     .select()
-                    .limit(1)
                     .execute()
                     .value
-                if items.isEmpty {
-                    print("🟡 Kết nối được, nhưng không có dữ liệu.")
-                } else {
-                    print("✅ Kết nối Supabase thành công! Dữ liệu đầu tiên: \(items[0])")
-                }
+                completion(items)
+                print("Collect data from supabase successfully!")
             } catch {
-                print("❌ Lỗi khi kết nối Supabase: \(error)")
+                print("Supabase connection failed!!!")
+            }
+        }
+    }
+    
+    func addSupabaseTodoITem(item: TodoItemDetail, completion: @escaping ([TodoItemDetail], Bool) -> Void){
+        Task {
+            do {
+                let inserted: [TodoItemDetail] = try await SupabaseServices.shared.supabaseClient
+                    .from("todos")
+                    .insert(item)
+                    .select()
+                    .execute()
+                    .value
+                print("Insert success")
+                completion(inserted, true)
+            } catch {
+                print("Insert failed")
+                completion([], false)
             }
         }
     }

@@ -113,7 +113,6 @@ class ToDoListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        SupabaseServices.shared.testSupabaseConnection()
         reloadUI()
         view.backgroundColor = UIColor(hex: "#F1F5F9")
         

@@ -41,6 +41,16 @@ class ToDoListViewModel{
         onDataChanged?()
     }
     
+    func addNewTodoItemDetail(item: TodoItemDetail){
+        SupabaseServices.shared.addSupabaseTodoITem(item: item, completion: { insertedData, isSuccess in
+            DispatchQueue.main.async {
+                if isSuccess {
+                    self.addNewUncompletedItem(insertedData[0])
+                }
+            }
+        })
+    }
+    
     func unCompletedItemList() -> [TodoItemDetail] {
         return uncompletedItems
     }
@@ -49,7 +59,7 @@ class ToDoListViewModel{
         return completedItems
     }
     
-    func addNewUncompletedItem(_ item: TodoItemDetail) {
+    private func addNewUncompletedItem(_ item: TodoItemDetail) {
         guard !item.isCompleted else { return }
         uncompletedItems.append(item)
         onDataChanged?()
