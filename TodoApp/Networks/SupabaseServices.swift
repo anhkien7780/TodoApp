@@ -27,6 +27,24 @@ class SupabaseServices{
         return supabaseClient
     }
     
+    func loadSupabaseTodoData(completion: @escaping ([TodoItemDetail]) -> Void){
+        DispatchQueue(label: "com.TodoApp.loadTodo", qos: .userInitiated).async {
+            Task {
+                do {
+                    let items: [TodoItemDetail] = try await SupabaseServices.shared.supabaseClient
+                        .from("todos")
+                        .select()
+                        .execute()
+                        .value
+                    completion(items)
+                    print("Collect data from supabase successfully!")
+                } catch {
+                    print("Supabase connection failed!!!")
+                }
+            }
+        }
+    }
+    
     func testSupabaseConnection() {
         Task {
             do {
@@ -36,7 +54,6 @@ class SupabaseServices{
                     .limit(1)
                     .execute()
                     .value
-                
                 if items.isEmpty {
                     print("🟡 Kết nối được, nhưng không có dữ liệu.")
                 } else {

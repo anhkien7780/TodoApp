@@ -15,4 +15,12 @@ struct TodoItemDetail: Codable {
     var time: String?
     var isCompleted: Bool
     var note: String?
+    
+    enum CodingKeys: String, CodingKey{
+        case id
+        case taskTitle = "task_title"
+        case category, date, time
+        case isCompleted = "is_completed"
+        case note
+    }
 }

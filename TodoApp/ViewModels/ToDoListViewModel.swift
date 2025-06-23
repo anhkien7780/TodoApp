@@ -8,14 +8,21 @@
 import Foundation
 
 class ToDoListViewModel{
-    private(set) var uncompletedItems: [TodoItemDetail]
-    private(set) var completedItems: [TodoItemDetail]
+    private(set) var uncompletedItems: [TodoItemDetail] = []
+    private(set) var completedItems: [TodoItemDetail] = []
     
     var onDataChanged: (() -> Void)?
     
-    init(items: [TodoItemDetail]) {
-        self.uncompletedItems = items.filter{ !$0.isCompleted }
-        self.completedItems = items.filter{ $0.isCompleted }
+    init() {
+        SupabaseServices.shared.loadSupabaseTodoData(
+            completion: { [weak self] data in
+                DispatchQueue.main.async {
+                    self?.uncompletedItems = data.filter{ !$0.isCompleted }
+                    self?.completedItems = data.filter{ $0.isCompleted }
+                    self?.onDataChanged?()
+                }
+            }
+        )
     }
     
     func toggleCompletion(for item: TodoItemDetail){

@@ -12,7 +12,7 @@ class AppCoordinator: Coordinator {
     var window: UIWindow?
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
-    var todoListViewModel = ToDoListViewModel(items: [])
+    var todoListViewModel = ToDoListViewModel()
     
     init(window: UIWindow?) {
         self.navigationController = UINavigationController()
