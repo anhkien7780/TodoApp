@@ -70,7 +70,9 @@ class ToDoListViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         self.viewModel.onDataChanged = {
             [weak self] in
-            self?.reloadUI()
+            DispatchQueue.main.async {
+                self?.reloadUI()
+            }
         }
     }
     

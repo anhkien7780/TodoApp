@@ -36,7 +36,6 @@ class SupabaseServices{
                     .execute()
                     .value
                 completion(items)
-                print("Collect data from supabase successfully!")
             } catch {
                 print("Supabase connection failed!!!")
             }
@@ -52,11 +51,28 @@ class SupabaseServices{
                     .select()
                     .execute()
                     .value
-                print("Insert success")
                 completion(inserted, true)
             } catch {
                 print("Insert failed")
                 completion([], false)
+            }
+        }
+    }
+    
+    func toggleTodoItemCompletion(item: TodoItemDetail, completion: @escaping ([TodoItemDetail]) -> Void){
+        Task {
+            do {
+                let updated: [TodoItemDetail] = try await
+                SupabaseServices.shared.supabaseClient
+                    .from("todos")
+                    .update(["is_completed": !item.isCompleted])
+                    .eq("id", value: item.id)
+                    .select()
+                    .execute()
+                    .value
+                completion(updated)
+            } catch {
+                print("Toggle is completed check box failed")
             }
         }
     }

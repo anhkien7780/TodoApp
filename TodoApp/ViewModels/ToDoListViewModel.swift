@@ -26,19 +26,25 @@ class ToDoListViewModel{
     }
     
     func toggleCompletion(for item: TodoItemDetail){
-        if item.isCompleted{
-            completedItems.removeAll { $0.id == item.id }
-            var updated = item
-            updated.isCompleted = false
-            uncompletedItems.append(updated)
-        } else {
-            uncompletedItems.removeAll{ $0.id == item.id }
-            var updated = item
-            updated.isCompleted = true
-            completedItems.append(updated)
-        }
-        
-        onDataChanged?()
+        SupabaseServices.shared.toggleTodoItemCompletion(item: item, completion: {
+            updatedItems in
+            let updatedItem = updatedItems[0]
+            if updatedItem.isCompleted{
+                self.uncompletedItems.removeAll {
+                    $0.id == updatedItem.id
+                }
+                var updated = updatedItem
+                updated.isCompleted = true
+                self.completedItems.append(updated)
+                
+            } else {
+                self.completedItems.removeAll{ $0.id == updatedItem.id }
+                var updated = updatedItem
+                updated.isCompleted = false
+                self.uncompletedItems.append(updated)
+            }
+            self.onDataChanged?()
+        })
     }
     
     func addNewTodoItemDetail(item: TodoItemDetail){
